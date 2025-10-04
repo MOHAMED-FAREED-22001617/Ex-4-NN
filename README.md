@@ -1,6 +1,5 @@
-
-<H3>ENTER YOUR NAME</H3>
-<H3>ENTER YOUR REGISTER NO.</H3>
+<H3>ENTER YOUR NAME: Mohamed Fareed F</H3>
+<H3>ENTER YOUR REGISTER NO: 212222230082</H3>
 <H3>EX. NO.4</H3>
 <H3>DATE:</H3>
 <H1 ALIGN =CENTER>Implementation of MLP with Backpropagation for Multiclassification</H1>
@@ -116,11 +115,46 @@ Normalize our dataset.
 
 <H3>Program:</H3> 
 
-Insert your code here
+```
+import pandas as pd
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+file_path ="C:/Users/admin/Desktop/Neural_Network/income.csv"
+data = pd.read_csv(file_path)
+print(data.head())
+print(data.columns)
+target_col = 'income'  
+X = data.drop(columns=[target_col])
+y = data[target_col]
+cat_columns = X.select_dtypes(include=['object']).columns
+le_dict = {}
+for col in cat_columns:
+    le = preprocessing.LabelEncoder()
+    X[col] = le.fit_transform(X[col])
+target_le = preprocessing.LabelEncoder()
+y_encoded = target_le.fit_transform(y)
+X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.25, random_state=42)
+scaler = StandardScaler()
+scaler.fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+mlp = MLPClassifier(hidden_layer_sizes=(10,10,10), max_iter=1000, random_state=42)
+mlp.fit(X_train, y_train)
+predictions = mlp.predict(X_test)
 
+decoded_predictions = target_le.inverse_transform(predictions)
+
+print(decoded_predictions)
+print(confusion_matrix(y_test, predictions))
+print(classification_report(y_test, predictions))
+```
 <H3>Output:</H3>
 
-Show your results here
+<img width="679" height="449" alt="image" src="https://github.com/user-attachments/assets/9b0c780e-8d36-4b9e-b658-0d086dc59207" />
+
 
 <H3>Result:</H3>
 Thus, MLP is implemented for multi-classification using python.
